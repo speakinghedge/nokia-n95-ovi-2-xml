@@ -59,14 +59,14 @@ def ovi_n95_contact_backup_2_xml(db_file):
         all_tables = cur.fetchall()
 
         if (u'Contact',) not in all_tables:
-            raise Exception('missing table \'Contact\' - not a valid \
-                OVI backup database file?!?')
+            raise Exception('missing table \'Contact\' - not a valid ' \
+                'OVI backup database file?!?')
         
         cur.execute("SELECT * FROM Contact")
         rows = cur.fetchall()
 
         if len(rows) == 0:
-            raise Exception('not contacts found in database.')    
+            raise Exception('no contacts found in database.')
 
         col_names = [col[0] for col in cur.description]
 
@@ -82,7 +82,8 @@ def ovi_n95_contact_backup_2_xml(db_file):
                     SubElement(contact, col_names[idx]).text = col
             i += 1
         
-        print prettify(root)
+        print u''.join(prettify(root)).encode('utf-8', \
+            errors='xmlcharrefreplace').strip()
 
     except sqlite3.Error, err:
         sys.stderr.write('failed to open sqlite database cause: %s', err)
